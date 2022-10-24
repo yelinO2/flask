@@ -1,4 +1,4 @@
-import sqlite3
+
 from db import db
 
 class ItemModel(db.Model):
@@ -8,12 +8,16 @@ class ItemModel(db.Model):
     name = db.Column(db.String)
     price = db.Column(db.Float(precision=3))
 
-    def __init__(self, name, price):
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    store = db.relationship('StoreModel')
+
+    def __init__(self, name, price, store_id):
         self.name = name 
         self.price = price
+        self.store_id = store_id
 
     def json(self):
-        return { 'name' : self.name, 'price' : self.price }
+        return { 'name' : self.name, 'price' : self.price, 'store_id' : self.store_id}
 
     @classmethod
     def find_by_item_name(cls, name):
@@ -31,10 +35,10 @@ class ItemModel(db.Model):
         #     return cls(*row)
 
     
-    def insert(self):
+    # def insert(self):
 
-        db.session.add(self)
-        db.session.commit()
+    #     db.session.add(self)
+    #     db.session.commit()
 
         # connection = sqlite3.connect('mydatabase.db')
         # cursor = connection.cursor()

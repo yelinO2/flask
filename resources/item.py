@@ -21,18 +21,25 @@ class Item(Resource):
     help = "This field is required."
    )
 
+   parser.add_argument(
+    'store_id',
+    type = int,
+    required = True,
+    help = "This field can't be empty and every item should have a store_id"
+   )
 
-   @ jwt_required()
+
+#    @ jwt_required()
    def post(self):
 
     data = Item.parser.parse_args()
     
     item = ItemModel.find_by_item_name(data['name'])
-    print(data)
+ 
     if item:
         return { "Message" : "Item with this name {} already exists.".format(data['name'])}, 400
 
-    item = ItemModel(data['name'], data['price'])
+    item = ItemModel(data['name'], data['price'], data["store_id"])
 
     try:
         item.save_to_db()
@@ -50,7 +57,7 @@ class Item(Resource):
 
     # return item, 201
    
-   @ jwt_required()
+#    @ jwt_required()
    def get(self):
         
         data = request.get_json()
@@ -60,16 +67,16 @@ class Item(Resource):
             return item.json()
         return {'Message' : 'Item Not Found'}, 401
 
-   @jwt_required
+#    @jwt_required()
    def delete(self):
 
         data = request.get_json()
         item = ItemModel.find_by_item_name(data['name'])
         if item:
-            ItemModel.delete_from_db()
+            item.delete_from_db()
         return {"Message" : "Item removed successfully."}, 201
 
-   @ jwt_required
+#    @ jwt_required()
    def put(self):
     
     data = Item.parser.parse_args()
@@ -85,7 +92,7 @@ class Item(Resource):
     
 
     if item is None:
-        item = ItemModel(data["name"], data["price"])
+        item = ItemModel(data["name"], data["price"], data["store_id"])
     else:
         item.price = data['price']
              

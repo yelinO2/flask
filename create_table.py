@@ -9,8 +9,11 @@ create_table = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userna
 
 cursor.execute(create_table)
 
-create_item_table = "CREATE TABLE IF NOT EXISTS items(id INTEGER PRIMARY KEYid INTEGER PRIMARY KEY, name text, price text)"
+create_item_table = "CREATE TABLE IF NOT EXISTS items(id INTEGER PRIMARY KEY, name text, price text)"
 cursor.execute(create_item_table)
+
+create_store_table = "CREATE TABLE IF NOT EXISTS stores(id INTEGER PRIMARY KEY, name text)"
+cursor.execute(create_store_table)
 
 
 
